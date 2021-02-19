@@ -1,11 +1,11 @@
 package edu.escuelaing.arem.pico;
 
-import com.sun.deploy.net.HttpRequest;
-import com.sun.deploy.net.HttpResponse;
 import edu.escuelaing.arem.server.HttpServer;
 
 
 import java.io.IOException;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.BiFunction;
