@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -cp "target/classes" edu.escuelaing.arem.server.HttpServer
+web: java -cp "target/classes" edu.escuelaing.arem.server.HttpServer
