@@ -1,11 +1,20 @@
 
 package edu.escuelaing.arem.server;
 
+
+import edu.escuelaing.arem.pico.Processor;
 import java.net.*;
 import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 public class HttpServer {
-    public static void main(String[] args) throws IOException {
+    private int port;
+
+    Map<String, Processor> routesToProcessors = new HashMap ();
+
+    public void startServer(int httpPort) throws IOException {
+        port = httpPort;
         ServerSocket serverSocket = null;
         try {
             serverSocket = new ServerSocket (getPort());
@@ -17,7 +26,7 @@ public class HttpServer {
         while (running) {
             Socket clientSocket = null;
             try {
-                System.out.println ("Listo para recibir ...");
+                System.out.println ("Listo para recibir en puerto " + getPort ());
                 clientSocket = serverSocket.accept ();
             } catch (IOException e) {
                 System.err.println ("Accept failed.");
@@ -28,25 +37,35 @@ public class HttpServer {
             BufferedReader in = new BufferedReader (
                     new InputStreamReader (clientSocket.getInputStream ()));
             String inputLine, outputLine;
+            boolean isfirstLine = true;
+            String path = "";
+
             while ((inputLine = in.readLine ()) != null) {
                 System.out.println ("Recibí: " + inputLine);
+                if(isfirstLine){
+                    path = inputLine.split (" ")[1];
+                    isfirstLine=false;
+                }
                 if (!in.ready ()) {
                     break;
                 }
             }
-            outputLine = "HTTP/1.1 200 OK\r\n"
-                    + "Content-Type: text/html\r\n"
-                    + "\r\n"
-                    + "<!DOCTYPE html>\n"
-                    + "<html>\n"
-                    + "<head>\n"
-                    + "<meta charset=\"UTF-8\">\n"
-                    + "<title>Title of the document</title>\n"
-                    + "</head>\n"
-                    + "<body>\n"
-                    + "<h1>Mi propio mensaje</h1>\n"
-                    + "</body>\n"
-                    + "</html>\n";
+
+            String resp = null;
+            for(String key: routesToProcessors.keySet ()){
+                if(path.startsWith (key)){
+                    String newPath = path.substring (key.length ());
+                    resp = routesToProcessors.get (key).handle (newPath, null, null);
+                }
+
+            }
+
+            if(resp==null){
+                outputLine = validOkHttpResponse ();
+            }else {
+                outputLine = resp;
+            }
+
             out.println (outputLine);
             out.close ();
             in.close ();
@@ -55,10 +74,31 @@ public class HttpServer {
         serverSocket.close();
     }
 
-    private static int getPort() {
-        if(System.getenv ("PORT") != null){
-            return Integer.parseInt (System.getenv ("PORT"));
-        }
-        return 36000;
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public int getPort() {
+        return this.port;
+    }
+
+    public void registerProcessor(String path, Processor processor) {
+        routesToProcessors.put (path, processor);
+
+    }
+    public String validOkHttpResponse(){
+        return "HTTP/1.1 200 OK\r\n"
+                + "Content-Type: text/html\r\n"
+                + "\r\n"
+                + "<!DOCTYPE html>\n"
+                + "<html>\n"
+                + "<head>\n"
+                + "<meta charset=\"UTF-8\">\n"
+                + "<title>Title of the document</title>\n"
+                + "</head>\n"
+                + "<body>\n"
+                + "<h1>Mi propio mensaje</h1>\n"
+                + "</body>\n"
+                + "</html>\n";
     }
 }
