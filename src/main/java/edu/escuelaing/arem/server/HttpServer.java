@@ -57,7 +57,7 @@ public class HttpServer {
 
     private static int getPort() {
         if(System.getenv ("PORT") != null){
-            return Integer.parseInt (System.getenv ("PORT"))
+            return Integer.parseInt (System.getenv ("PORT"));
         }
         return 36000;
     }
