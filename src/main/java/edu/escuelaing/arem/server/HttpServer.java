@@ -32,10 +32,9 @@ public class HttpServer {
                 System.err.println ("Accept failed.");
                 System.exit (1);
             }
-            PrintWriter out = new PrintWriter (
-                    clientSocket.getOutputStream (), true);
-            BufferedReader in = new BufferedReader (
-                    new InputStreamReader (clientSocket.getInputStream ()));
+
+            PrintWriter out = new PrintWriter (clientSocket.getOutputStream (), true);
+            BufferedReader in = new BufferedReader ( new InputStreamReader (clientSocket.getInputStream ()));
             String inputLine, outputLine;
             boolean isfirstLine = true;
             String path = "";
@@ -55,7 +54,7 @@ public class HttpServer {
             for(String key: routesToProcessors.keySet ()){
                 if(path.startsWith (key)){
                     String newPath = path.substring (key.length ());
-                    resp = routesToProcessors.get (key).handle (newPath, null, null);
+                    resp = routesToProcessors.get(key).handle(newPath, null, null);
                 }
 
             }
@@ -94,10 +93,11 @@ public class HttpServer {
                 + "<html>\n"
                 + "<head>\n"
                 + "<meta charset=\"UTF-8\">\n"
-                + "<title>Title of the document</title>\n"
+                + "<title>Buscador de recursos</title>\n"
                 + "</head>\n"
                 + "<body>\n"
-                + "<h1>Mi propio mensaje</h1>\n"
+                + "<h1>para encontrar algun recurso, simplemente añada al url /Apps/\"nombre del recurso\".\"extension\"</h1>\n"
+                + "<h1> tenemos disponibles eci.png,prueba.html<h1>\n"
                 + "</body>\n"
                 + "</html>\n";
     }

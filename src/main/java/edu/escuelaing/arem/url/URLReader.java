@@ -18,7 +18,7 @@ public class URLReader {
      */
     public static void ejercicioUno() {
         try {
-            URL url = new URL("/Results?datos=prueba.html&inputDatos=Buscar");
+            URL url = new URL("https://www.youtube.com/watch?v=MP_XYEjbKm0#ref");
             System.out.println(url.getProtocol());
             System.out.println(url.getAuthority());
             System.out.println(url.getHost());

@@ -1,5 +1,6 @@
 package edu.escuelaing.arem.pico;
 
+import edu.escuelaing.arem.header.headerHttp;
 import edu.escuelaing.arem.server.HttpServer;
 
 
@@ -43,23 +44,25 @@ class PicoSparkServer implements Processor {
 
     @Override
     public String handle(String path,HttpRequest req, HttpResponse resp) {
+        headerHttp headerHttp = new headerHttp ();
         if(functions.containsKey (path)){
+            switch (path.substring (path.indexOf ("."))) {
+                case ".css":
+                    return headerHttp.validOkHttpHeadercss () + functions.get (path).apply (req,resp);
+                case ".js":
+                    return headerHttp.validOkHttpHeaderjs () + functions.get (path).apply (req,resp);
+                case ".json":
+                    return headerHttp.validOkHttpHeaderjson () + functions.get (path).apply (req,resp);
+                case ".jpeg":
+                    return headerHttp.validOkHttpHeaderjpeg () + functions.get (path).apply (req,resp);
+                case ".png":
+                    return headerHttp.validOkHttpHeaderpng () + functions.get (path).apply (req,resp);
+                default:
 
-            return validOkHttpHeader() + functions.get (path).apply (req,resp);
+                    return headerHttp.validOkHttpHeaderhtml () + functions.get (path).apply (req,resp);
+            }
         }
-        return validErrorHttpHeader() + "Error";
+        return headerHttp.validErrorHttpHeaderhtml ()+ "Error";
     }
 
-    private String validErrorHttpHeader() {
-        return  "HTTP/1.1 404 Not Found\r\n"
-                + "Content-Type: text/html\r\n"
-                +"\r\n";
-    }
-
-    private String validOkHttpHeader() {
-        return  "HTTP/1.1 200 OK\r\n"
-                + "Content-Type: text/html\r\n"
-                +"\r\n";
-
-    }
 }
