@@ -4,6 +4,8 @@ esta es una aplicacion web, la cual devuelve recursos ubicados en el servidor.
 
 tambien se encuentran las soluciones del laboratorio 3 separado en sus paquetes.
 
+puedes ver el web service [aqui](https://powerful-mountain-21359.herokuapp.com/ )
+
 ## Comenzando 🚀
 
 para obtener una cobia de este repositorio realizaremos:
